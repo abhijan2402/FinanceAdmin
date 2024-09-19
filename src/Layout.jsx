@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <div className="container-fluid p-0">
       <div className="row g-0">
-        <aside className="col-12 col-md-3 col-lg-2 bg-light sidebar">
+        <aside className="col-12 col-md-3 col-lg-2 sidebar">
           <nav className="navbar navbar-expand-md navbar-light flex-md-column">
             <Link className="navbar-brand mb-3" to="/">
               <i className="bi bi-speedometer2"></i> Admin Panel

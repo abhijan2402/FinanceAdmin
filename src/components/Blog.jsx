@@ -38,7 +38,7 @@ const Blog = () => {
   return (
     <div className="container blog-form mt-4">
       <h1 className="text-center mb-4">Submit Blog</h1>
-      <form onSubmit={handleSubmit} className="p-4 shadow-sm rounded bg-light">
+      <form onSubmit={handleSubmit} className="p-4">
         <div className="mb-3">
           <label className="form-label">
             <i className="bi bi-pencil-square"></i> Title
