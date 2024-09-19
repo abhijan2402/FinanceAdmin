@@ -1,0 +1,36 @@
+/* Blog.css */
+.blog-form {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .custom-btn {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .custom-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .custom-btn:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .blog-form .form-label {
+    font-weight: bold;
+  }
+  
+  .blog-form input,
+  .blog-form textarea {
+    border-radius: 5px;
+  }
+  
+  .blog-form .bi {
+    margin-right: 8px;
+  }
+  
