@@ -15,7 +15,7 @@ const BlogList = () => {
   };
 
   const getData = async () => {
-    setLoading(true); 
+    setLoading(true);
     let resultArray = [];
     const q = query(collection(db, "Blog"));
     const querySnapshot = await getDocs(q);
@@ -81,7 +81,15 @@ const BlogList = () => {
               </div>
             ))
           ) : (
-            <p style={{fontSize:"30px", padding:"40px 30px", textAlign:"center"}}>No blogs available</p>
+            <p
+              style={{
+                fontSize: "30px",
+                padding: "40px 30px",
+                textAlign: "center",
+              }}
+            >
+              No blogs available
+            </p>
           )}
         </div>
       </div>
