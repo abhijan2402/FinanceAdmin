@@ -1,6 +1,9 @@
 // Blog.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../Style/Blog.css"; // Custom CSS for Blog styles
+import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import { db, storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 const Blog = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +13,10 @@ const Blog = () => {
     images: [],
   });
   const [error, setError] = useState("");
+  const [loader, setloader] = useState(false);
+  const [disable, setdisable] = useState(false);
+  const [titleImage, setTitleImage] = useState("");
+  const [dataImg, setdataImg] = useState([]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -31,9 +38,79 @@ const Blog = () => {
       setError("Please upload at least 1 image.");
       return;
     }
-    console.log("Blog Data:", formData);
-    // Submit form logic here
+    createData(formData);
   };
+
+  const createData = async (data) => {
+    setloader(true);
+    setdisable(true);
+    const titleImageUrl = await getDownloadUrl(titleImage);
+    console.log(titleImageUrl, "IMGG");
+    // setDownloadedUrl(titleImageUrl);
+    await addDoc(collection(db, "Blog"), {
+      Title: data?.title,
+      Description: data?.description,
+      Tags: data?.tags,
+      Image: titleImageUrl,
+    })
+      .then((docRef) => {
+        alert("Blog added");
+        // getData()
+        setdisable(false);
+        setloader(false);
+        return docRef.id;
+      })
+      .catch((e) => {
+        alert("Error while adding blogs! Please try again later");
+        setloader(false);
+        setdisable(false);
+      });
+  };
+
+  const getDownloadUrl = async (file) => {
+    const storageRef = ref(storage, `/Banner/${file?.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (error) => {
+          reject(error);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            console.log(downloadURL, "DOWNLAOD URL");
+            resolve(downloadURL);
+          } catch (e) {
+            reject(false);
+          }
+        }
+      );
+    });
+  };
+
+  const UploadImge = async (e) => {
+    // const namesArray = NameSeperator(e.target.files[0].type);
+    const seperatoedNameArray = e.target.files[0].type.split("/");
+    setTitleImage(e.target.files[0]);
+  };
+
+  const getData = async () => {
+    let resultArray = [];
+    const q = query(collection(db, "Blog"));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      resultArray.push({ id: doc.id, ...doc.data() });
+    });
+    console.log(resultArray, "ARRAY");
+    setdataImg(resultArray);
+    console.log(dataImg);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="container blog-form mt-4">
@@ -82,20 +159,24 @@ const Blog = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">
-            <i className="bi bi-file-earmark-image"></i> Upload Images (min 1, max 5)
+            <i className="bi bi-file-earmark-image"></i> Upload Image
           </label>
           <input
             type="file"
             name="images"
             accept="image/*"
             multiple
-            onChange={handleFileChange}
+            onChange={(e) => {
+              UploadImge(e);
+              handleFileChange(e);
+            }}
             className="form-control"
           />
           {error && <p className="text-danger mt-2">{error}</p>}
         </div>
         <div className="text-center">
           <button
+            disabled={disable}
             type="submit"
             className="btn custom-btn btn-lg mt-3"
           >

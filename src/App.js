@@ -9,12 +9,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="blog" element={<Blog />} />
+        <Route path="/FinanceAdmin" element={<Layout />}>
+          <Route path="/FinanceAdmin/dashboard" element={<Dashboard />} />
+          <Route path="/FinanceAdmin/blog" element={<Blog />} />
         </Route>
       </Routes>
     </Router>
+
   );
 }
 

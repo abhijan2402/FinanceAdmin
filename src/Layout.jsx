@@ -26,12 +26,12 @@ const Layout = () => {
             <div className="collapse navbar-collapse" id="sidebarNav">
               <ul className="navbar-nav flex-column w-100">
                 <li className="nav-item">
-                  <Link to="/dashboard" className="nav-link">
+                  <Link to="/FinanceAdmin/dashboard" className="nav-link">
                     <i className="bi bi-house-door"></i> Dashboard
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/blog" className="nav-link">
+                  <Link to="/FinanceAdmin/blog" className="nav-link">
                     <i className="bi bi-pencil-square"></i> Blog
                   </Link>
                 </li>
