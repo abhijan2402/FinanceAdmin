@@ -23,10 +23,25 @@ const Blog = ({ handleBlogForm, setBlog }) => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+
     if (files.length > 5) {
       setError("You can upload a maximum of 5 images.");
       return;
     }
+
+    for (let i = 0; i < files.length; i++) {
+      if (!validImageTypes.includes(files[i].type)) {
+        setError("Please upload only image files (jpeg, png, gif, webp).");
+        return;
+      }
+    }
+
     setError("");
     setFormData({ ...formData, images: files });
   };
@@ -92,13 +107,15 @@ const Blog = ({ handleBlogForm, setBlog }) => {
     setTitleImage(e.target.files[0]);
   };
 
-
   return (
     <div className="overlay">
       <div className="blog-form-popup">
         <div className="bolgForm_header">
           <h1 className="text-center mb-4">Add Blog</h1>
-          <i className="bi bi-x-square" onClick={() => handleBlogForm(false)}></i>
+          <i
+            className="bi bi-x-square"
+            onClick={() => handleBlogForm(false)}
+          ></i>
         </div>
         <form onSubmit={handleSubmit} className="p-4">
           <div className="mb-3">

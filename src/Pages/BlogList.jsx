@@ -70,9 +70,6 @@ const BlogList = () => {
                     </div>
                   </div>
                   <div className="card-footer">
-                    <button className="card_edit">
-                      <i className="bi bi-pencil-fill"></i> Edit
-                    </button>
                     <button className="card_delete">
                       <i className="bi bi-trash-fill"></i> Delete
                     </button>
