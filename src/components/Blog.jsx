@@ -1,11 +1,10 @@
-// Blog.js
 import React, { useEffect, useState } from "react";
 import "../Style/Blog.css"; // Custom CSS for Blog styles
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-const Blog = () => {
+const Blog = ({ handleBlogForm, setBlog }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -13,10 +12,10 @@ const Blog = () => {
     images: [],
   });
   const [error, setError] = useState("");
-  const [loader, setloader] = useState(false);
-  const [disable, setdisable] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [disable, setDisable] = useState(false);
   const [titleImage, setTitleImage] = useState("");
-  const [dataImg, setdataImg] = useState([]);
+  const [dataImg, setDataImg] = useState([]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,11 +41,10 @@ const Blog = () => {
   };
 
   const createData = async (data) => {
-    setloader(true);
-    setdisable(true);
+    setLoader(true);
+    setDisable(true);
     const titleImageUrl = await getDownloadUrl(titleImage);
     console.log(titleImageUrl, "IMGG");
-    // setDownloadedUrl(titleImageUrl);
     await addDoc(collection(db, "Blog"), {
       Title: data?.title,
       Description: data?.description,
@@ -55,15 +53,14 @@ const Blog = () => {
     })
       .then((docRef) => {
         alert("Blog added");
-        // getData()
-        setdisable(false);
-        setloader(false);
+        setDisable(false);
+        setLoader(false);
         return docRef.id;
       })
       .catch((e) => {
         alert("Error while adding blogs! Please try again later");
-        setloader(false);
-        setdisable(false);
+        setLoader(false);
+        setDisable(false);
       });
   };
 
@@ -91,99 +88,88 @@ const Blog = () => {
   };
 
   const UploadImge = async (e) => {
-    // const namesArray = NameSeperator(e.target.files[0].type);
     const seperatoedNameArray = e.target.files[0].type.split("/");
     setTitleImage(e.target.files[0]);
   };
 
-  const getData = async () => {
-    let resultArray = [];
-    const q = query(collection(db, "Blog"));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      resultArray.push({ id: doc.id, ...doc.data() });
-    });
-    console.log(resultArray, "ARRAY");
-    setdataImg(resultArray);
-    console.log(dataImg);
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
-    <div className="container blog-form mt-4">
-      <h1 className="text-center mb-4">Submit Blog</h1>
-      <form onSubmit={handleSubmit} className="p-4">
-        <div className="mb-3">
-          <label className="form-label">
-            <i className="bi bi-pencil-square"></i> Title
-          </label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="form-control"
-            placeholder="Enter blog title"
-            required
-          />
+    <div className="overlay">
+      <div className="blog-form-popup">
+        <div className="bolgForm_header">
+          <h1 className="text-center mb-4">Add Blog</h1>
+          <i className="bi bi-x-square" onClick={() => handleBlogForm(false)}></i>
         </div>
-        <div className="mb-3">
-          <label className="form-label">
-            <i className="bi bi-card-text"></i> Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="form-control"
-            rows="4"
-            placeholder="Enter blog description"
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">
-            <i className="bi bi-tags"></i> Tags (comma separated)
-          </label>
-          <input
-            type="text"
-            name="tags"
-            value={formData.tags}
-            onChange={handleChange}
-            className="form-control"
-            placeholder="e.g. React, JavaScript"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">
-            <i className="bi bi-file-earmark-image"></i> Upload Image
-          </label>
-          <input
-            type="file"
-            name="images"
-            accept="image/*"
-            multiple
-            onChange={(e) => {
-              UploadImge(e);
-              handleFileChange(e);
-            }}
-            className="form-control"
-          />
-          {error && <p className="text-danger mt-2">{error}</p>}
-        </div>
-        <div className="text-center">
-          <button
-            disabled={disable}
-            type="submit"
-            className="btn custom-btn btn-lg mt-3"
-          >
-            <i className="bi bi-check-circle"></i> Submit Blog
-          </button>
-        </div>
-      </form>
+        <form onSubmit={handleSubmit} className="p-4">
+          <div className="mb-3">
+            <label className="form-label">
+              <i className="bi bi-pencil-square"></i> Title
+            </label>
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="Enter blog title"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">
+              <i className="bi bi-card-text"></i> Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="form-control"
+              rows="4"
+              placeholder="Enter blog description"
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">
+              <i className="bi bi-tags"></i> Tags (comma separated)
+            </label>
+            <input
+              type="text"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              className="form-control"
+              placeholder="e.g. React, JavaScript"
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">
+              <i className="bi bi-file-earmark-image"></i> Upload Image
+            </label>
+            <input
+              type="file"
+              name="images"
+              accept="image/*"
+              multiple
+              onChange={(e) => {
+                UploadImge(e);
+                handleFileChange(e);
+              }}
+              className="form-control"
+            />
+            {error && <p className="text-danger mt-2">{error}</p>}
+          </div>
+          <div className="text-center">
+            <button
+              disabled={disable}
+              type="submit"
+              className="btn custom-btn btn-lg mt-3"
+            >
+              <i className="bi bi-check-circle"></i> Submit Blog
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

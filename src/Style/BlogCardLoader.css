@@ -1,0 +1,47 @@
+.blog-card-loader {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    min-height: 350px;
+  }
+  
+  .loader-image {
+    background-color: #e0e0e0;
+    height: 150px;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .loader-title {
+    background-color: #e0e0e0;
+    height: 20px;
+    width: 60%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  .loader-description {
+    background-color: #e0e0e0;
+    height: 50px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  .loader-tags {
+    background-color: #e0e0e0;
+    height: 20px;
+    width: 40%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .loader-button {
+    background-color: #e0e0e0;
+    height: 30px;
+    width: 45%;
+    margin-right: 5px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+  
